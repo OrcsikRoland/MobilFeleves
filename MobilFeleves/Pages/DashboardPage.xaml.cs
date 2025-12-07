@@ -1,10 +1,15 @@
 using MobilFeleves.ViewModels;
+using MobilFeleves;
 
 namespace MobilFeleves.Pages;
 
 public partial class DashboardPage : ContentPage
 {
     private readonly DashboardViewModel _viewModel;
+
+    public DashboardPage() : this(ServiceHelper.GetService<DashboardViewModel>())
+    {
+    }
 
     public DashboardPage(DashboardViewModel viewModel)
     {

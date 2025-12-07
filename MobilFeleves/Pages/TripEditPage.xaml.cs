@@ -1,10 +1,15 @@
 using MobilFeleves.ViewModels;
+using MobilFeleves;
 
 namespace MobilFeleves.Pages;
 
 public partial class TripEditPage : ContentPage
 {
     private readonly TripEditViewModel _viewModel;
+
+    public TripEditPage() : this(ServiceHelper.GetService<TripEditViewModel>())
+    {
+    }
 
     public TripEditPage(TripEditViewModel viewModel)
     {

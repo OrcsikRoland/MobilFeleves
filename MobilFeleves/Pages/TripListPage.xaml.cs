@@ -1,10 +1,15 @@
 using MobilFeleves.ViewModels;
+using MobilFeleves;
 
 namespace MobilFeleves.Pages;
 
 public partial class TripListPage : ContentPage
 {
     private readonly TripListViewModel _viewModel;
+
+    public TripListPage() : this(ServiceHelper.GetService<TripListViewModel>())
+    {
+    }
 
     public TripListPage(TripListViewModel viewModel)
     {
