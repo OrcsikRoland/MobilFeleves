@@ -22,23 +22,23 @@ public partial class TripDetailPage : ContentPage
 
     private void UpdateMap()
     {
-        if (_viewModel.Trip is null)
-        {
-            return;
-        }
-
         TripMap.Pins.Clear();
+
+        var hasTrip = _viewModel.Trip is not null;
+        var pinLocation = _viewModel.StartLocation;
+        var pinLabel = hasTrip ? _viewModel.Trip!.Title : "Túra kezdőpont";
+        var pinAddress = hasTrip && _viewModel.Trip!.DistanceKm > 0
+            ? $"{_viewModel.Trip.DistanceKm:F1} km túra"
+            : "Kezdő helyszín";
 
         TripMap.Pins.Add(new Pin
         {
-            Label = _viewModel.Trip.Title,
-            Address = _viewModel.Trip.DistanceKm > 0
-                ? $"{_viewModel.Trip.DistanceKm:F1} km túra"
-                : "Túra kezdete",
+            Label = pinLabel,
+            Address = pinAddress,
             Type = PinType.Place,
-            Location = _viewModel.StartLocation
+            Location = pinLocation
         });
 
-        TripMap.MoveToRegion(_viewModel.MapRegion);
+        TripMap.MoveToRegion(_viewModel.MapRegion ?? MapSpan.FromCenterAndRadius(pinLocation, Distance.FromKilometers(5)));
     }
 }

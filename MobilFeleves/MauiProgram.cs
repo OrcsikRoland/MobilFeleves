@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Maps;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MobilFeleves.Pages;
