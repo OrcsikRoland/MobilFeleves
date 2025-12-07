@@ -4,7 +4,7 @@ namespace MobilFeleves.Services;
 
 public class ConnectivityService : IConnectivityService
 {
-    public bool IsConnected => Connectivity.Current.NetworkAccess == NetworkAccess.Internet;
+    public bool IsConnected => IsNetworkAccessOnline(Connectivity.Current.NetworkAccess);
 
     public event EventHandler<bool>? ConnectivityChanged;
 
@@ -15,7 +15,10 @@ public class ConnectivityService : IConnectivityService
 
     private void OnConnectivityChanged(object? sender, ConnectivityChangedEventArgs e)
     {
-        var isOnline = e.NetworkAccess == NetworkAccess.Internet;
+        var isOnline = IsNetworkAccessOnline(e.NetworkAccess);
         ConnectivityChanged?.Invoke(this, isOnline);
     }
+
+    private static bool IsNetworkAccessOnline(NetworkAccess access) =>
+        access is NetworkAccess.Internet or NetworkAccess.ConstrainedInternet;
 }
