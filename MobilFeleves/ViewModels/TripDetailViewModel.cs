@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
 using Microsoft.Maui.Controls.Maps;
 using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.Maps;
 using MobilFeleves.Models;
 using MobilFeleves.Services;
 
