@@ -1,3 +1,5 @@
+using MobilFeleves.Pages;
+
 namespace MobilFeleves;
 
 public partial class AppShell : Shell
@@ -7,5 +9,6 @@ public partial class AppShell : Shell
         InitializeComponent();
         Routing.RegisterRoute(nameof(Pages.TripDetailPage), typeof(Pages.TripDetailPage));
         Routing.RegisterRoute(nameof(Pages.TripEditPage), typeof(Pages.TripEditPage));
+        Routing.RegisterRoute(nameof(TripListPage), typeof(TripListPage));
     }
 }
