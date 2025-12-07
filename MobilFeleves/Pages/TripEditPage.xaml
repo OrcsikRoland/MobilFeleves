@@ -7,12 +7,12 @@
         <VerticalStackLayout Padding="16" Spacing="12">
             <Entry Placeholder="Név" Text="{Binding Trip.Title}" />
             <Editor Placeholder="Leírás" Text="{Binding Trip.Description}" AutoSize="TextChanges" />
-            <Entry Placeholder="Táv (km)" Keyboard="Numeric" Text="{Binding DistanceKmText}" />
-            <Entry Placeholder="Szintemelkedés (m)" Keyboard="Numeric" Text="{Binding ElevationGainText}" />
+            <Entry Placeholder="Táv (km)" Keyboard="Numeric" Text="{Binding Trip.DistanceKm}" />
+            <Entry Placeholder="Szintemelkedés (m)" Keyboard="Numeric" Text="{Binding Trip.ElevationGainM}" />
             <DatePicker Date="{Binding Trip.Date}" />
-            <Entry Placeholder="Időtartam (perc)" Keyboard="Numeric" Text="{Binding DurationMinutesText}" />
-            <Entry Placeholder="Kezdő lat" Keyboard="Numeric" Text="{Binding StartLatitudeText}" />
-            <Entry Placeholder="Kezdő lon" Keyboard="Numeric" Text="{Binding StartLongitudeText}" />
+            <Entry Placeholder="Időtartam (perc)" Keyboard="Numeric" Text="{Binding Trip.DurationMinutes}" />
+            <Entry Placeholder="Kezdő lat" Keyboard="Numeric" Text="{Binding Trip.StartLatitude}" />
+            <Entry Placeholder="Kezdő lon" Keyboard="Numeric" Text="{Binding Trip.StartLongitude}" />
 
             <Label TextColor="Red" Text="{Binding ValidationMessage}" />
             <Button Text="Mentés" Command="{Binding SaveCommand}" />
