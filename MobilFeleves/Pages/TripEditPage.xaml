@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobilFeleves.Pages.TripEditPage"
+             Title="Túra szerkesztése">
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+            <Entry Placeholder="Név" Text="{Binding Trip.Title}" />
+            <Editor Placeholder="Leírás" Text="{Binding Trip.Description}" AutoSize="TextChanges" />
+            <Entry Placeholder="Táv (km)" Keyboard="Numeric" Text="{Binding DistanceKmText}" />
+            <Entry Placeholder="Szintemelkedés (m)" Keyboard="Numeric" Text="{Binding ElevationGainText}" />
+            <DatePicker Date="{Binding Trip.Date}" />
+            <Entry Placeholder="Időtartam (perc)" Keyboard="Numeric" Text="{Binding DurationMinutesText}" />
+            <Entry Placeholder="Kezdő lat" Keyboard="Numeric" Text="{Binding StartLatitudeText}" />
+            <Entry Placeholder="Kezdő lon" Keyboard="Numeric" Text="{Binding StartLongitudeText}" />
+
+            <Label TextColor="Red" Text="{Binding ValidationMessage}" />
+            <Button Text="Mentés" Command="{Binding SaveCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
