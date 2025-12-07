@@ -1,5 +1,7 @@
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Controls.Maps;
+using Microsoft.Maui.Devices.Sensors;
 using MobilFeleves.Models;
 using MobilFeleves.Services;
 
@@ -9,11 +11,11 @@ namespace MobilFeleves.ViewModels;
 public class TripDetailViewModel : BaseViewModel
 {
     private readonly ITripRepository _repository;
-    private readonly IConnectivityService _connectivityService;
+    private static readonly Location DefaultStartLocation = new(47.4979, 19.0402);
     private int _tripId;
     private Trip? _trip;
-    private bool _isOnline;
-    private string _connectivityMessage = string.Empty;
+    private Location _startLocation = DefaultStartLocation;
+    private MapSpan _mapRegion;
 
     public int TripId
     {
@@ -27,34 +29,32 @@ public class TripDetailViewModel : BaseViewModel
         set => SetProperty(ref _trip, value);
     }
 
-    public bool IsOnline
+    public Location StartLocation
     {
-        get => _isOnline;
-        set => SetProperty(ref _isOnline, value);
+        get => _startLocation;
+        set => SetProperty(ref _startLocation, value);
     }
 
-    public string ConnectivityMessage
+    public MapSpan MapRegion
     {
-        get => _connectivityMessage;
-        set => SetProperty(ref _connectivityMessage, value);
+        get => _mapRegion;
+        set => SetProperty(ref _mapRegion, value);
     }
 
     public Command EditCommand { get; }
     public Command DeleteCommand { get; }
     public Command ShareCommand { get; }
 
-    public TripDetailViewModel(ITripRepository repository, IConnectivityService connectivityService)
+    public TripDetailViewModel(ITripRepository repository)
     {
         _repository = repository;
-        _connectivityService = connectivityService;
         Title = "Túra részletei";
 
         EditCommand = new Command(async () => await GoToEditAsync(), () => Trip is not null);
         DeleteCommand = new Command(async () => await DeleteAsync(), () => Trip is not null);
-        ShareCommand = new Command(async () => await ShareAsync(), () => Trip is not null && IsOnline);
+        ShareCommand = new Command(async () => await ShareAsync(), () => Trip is not null);
 
-        UpdateConnectivity(connectivityService.IsConnected);
-        _connectivityService.ConnectivityChanged += (_, isConnected) => UpdateConnectivity(isConnected);
+        _mapRegion = MapSpan.FromCenterAndRadius(StartLocation, Distance.FromKilometers(5));
     }
 
     public async Task LoadTripAsync()
@@ -66,6 +66,7 @@ public class TripDetailViewModel : BaseViewModel
 
         Trip = await _repository.GetTripAsync(TripId);
         OnPropertyChanged(nameof(Trip));
+        UpdateLocation();
         UpdateCommands();
     }
 
@@ -112,12 +113,16 @@ public class TripDetailViewModel : BaseViewModel
         });
     }
 
-    private void UpdateConnectivity(bool isConnected)
+    private void UpdateLocation()
     {
-        IsOnline = isConnected;
-        ConnectivityMessage = isConnected
-            ? "Online: a megosztás aktív"
-            : "Offline: nincs internetkapcsolat";
-        ShareCommand.ChangeCanExecute();
+        var latitude = Trip?.StartLatitude;
+        var longitude = Trip?.StartLongitude;
+
+        var location = latitude is null or 0 || longitude is null or 0
+            ? DefaultStartLocation
+            : new Location(latitude.Value, longitude.Value);
+
+        StartLocation = location;
+        MapRegion = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
     }
 }

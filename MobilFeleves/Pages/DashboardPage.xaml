@@ -6,23 +6,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="16">
             <Label Text="Túrák összefoglaló" Style="{StaticResource Headline}" />
-            <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="12" CornerRadius="12">
-                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                    <Label Text="●" FontSize="20">
-                        <Label.Style>
-                            <Style TargetType="Label">
-                                <Setter Property="TextColor" Value="Red" />
-                                <Style.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsOnline}" Value="True">
-                                        <Setter Property="TextColor" Value="LimeGreen" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                    <Label Text="{Binding ConnectivityMessage}" FontAttributes="Bold" />
-                </HorizontalStackLayout>
-            </Frame>
             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" Padding="0,8">
                 <Frame BackgroundColor="{DynamicResource SecondaryColor}" CornerRadius="12" Padding="16" Grid.Column="0">
                     <VerticalStackLayout>

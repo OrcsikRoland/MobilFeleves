@@ -4,24 +4,6 @@
              x:Class="MobilFeleves.Pages.TripListPage"
              Title="Túrák">
     <StackLayout Padding="16" Spacing="12">
-        <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="10" CornerRadius="10">
-            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                <Label Text="●" FontSize="20">
-                    <Label.Style>
-                        <Style TargetType="Label">
-                            <Setter Property="TextColor" Value="Red" />
-                            <Style.Triggers>
-                                <DataTrigger TargetType="Label" Binding="{Binding IsOnline}" Value="True">
-                                    <Setter Property="TextColor" Value="LimeGreen" />
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Label.Style>
-                </Label>
-                <Label Text="{Binding ConnectivityMessage}" FontAttributes="Bold" />
-            </HorizontalStackLayout>
-        </Frame>
-
         <Button Text="Új túra" Command="{Binding AddTripCommand}" />
         <CollectionView ItemsSource="{Binding Trips}"
                         SelectionMode="Single"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
              x:Class="MobilFeleves.Pages.TripDetailPage"
              Title="Túra részletei">
     <ScrollView>
@@ -12,27 +13,16 @@
             <Label Text="{Binding Trip.DurationText, StringFormat='Időtartam: {0}'}" />
             <Label Text="{Binding Trip.Description}" />
 
-            <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="10" CornerRadius="10">
-                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
-                    <Label Text="●" FontSize="20">
-                        <Label.Style>
-                            <Style TargetType="Label">
-                                <Setter Property="TextColor" Value="Red" />
-                                <Style.Triggers>
-                                    <DataTrigger TargetType="Label" Binding="{Binding IsOnline}" Value="True">
-                                        <Setter Property="TextColor" Value="LimeGreen" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Label.Style>
-                    </Label>
-                    <Label Text="{Binding ConnectivityMessage}" FontAttributes="Bold" />
-                </HorizontalStackLayout>
-            </Frame>
+            <maps:Map x:Name="TripMap"
+                     HeightRequest="240"
+                     MapType="Street"
+                     IsScrollEnabled="True"
+                     IsZoomEnabled="True"
+                     IsTrafficEnabled="True" />
 
             <HorizontalStackLayout Spacing="12">
                 <Button Text="Szerkesztés" Command="{Binding EditCommand}" />
-                <Button Text="Megosztás" Command="{Binding ShareCommand}" IsEnabled="{Binding IsOnline}" />
+                <Button Text="Megosztás" Command="{Binding ShareCommand}" />
                 <Button Text="Törlés" TextColor="Red" Command="{Binding DeleteCommand}" />
             </HorizontalStackLayout>
         </VerticalStackLayout>

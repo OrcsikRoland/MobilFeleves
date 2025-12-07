@@ -1,3 +1,4 @@
+using Microsoft.Maui.Controls.Maps;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MobilFeleves.Pages;
@@ -13,6 +14,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
+            .UseMauiMaps()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -20,7 +22,6 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<ITripRepository, TripRepository>();
-        builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 
         builder.Services.AddTransient<DashboardViewModel>();
         builder.Services.AddTransient<TripListViewModel>();
