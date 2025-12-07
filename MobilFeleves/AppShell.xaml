@@ -3,12 +3,16 @@
     x:Class="MobilFeleves.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:MobilFeleves"
+    xmlns:pages="clr-namespace:MobilFeleves.Pages"
     Title="MobilFeleves">
 
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+    <TabBar>
+        <ShellContent
+            Title="Kezdőlap"
+            ContentTemplate="{DataTemplate pages:DashboardPage}" />
+        <ShellContent
+            Title="Túrák"
+            ContentTemplate="{DataTemplate pages:TripListPage}" />
+    </TabBar>
 
 </Shell>
