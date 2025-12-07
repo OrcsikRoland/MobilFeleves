@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="MobilFeleves.Pages.TripListPage"
+             Title="Túrák">
+    <StackLayout Padding="16" Spacing="12">
+        <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="10" CornerRadius="10">
+            <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                <Label Text="●" FontSize="20">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Setter Property="TextColor" Value="Red" />
+                            <Style.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding IsOnline}" Value="True">
+                                    <Setter Property="TextColor" Value="LimeGreen" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+                <Label Text="{Binding ConnectivityMessage}" FontAttributes="Bold" />
+            </HorizontalStackLayout>
+        </Frame>
+
+        <Button Text="Új túra" Command="{Binding AddTripCommand}" />
+        <CollectionView ItemsSource="{Binding Trips}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedTrip, Mode=TwoWay}">
+            <CollectionView.EmptyView>
+                <Label Text="Még nincs rögzített túra." HorizontalOptions="Center" VerticalOptions="Center" />
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="0,4" Padding="12" BorderColor="{DynamicResource PrimaryColor}" CornerRadius="8">
+                        <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto,Auto">
+                            <Label Text="{Binding Title}" FontAttributes="Bold" Grid.ColumnSpan="2" />
+                            <Label Text="{Binding Date, StringFormat='{0:yyyy.MM.dd}'}" Grid.Row="1" />
+                            <Label Text="{Binding DistanceKm, StringFormat='{0:F1} km'}" Grid.Row="1" Grid.Column="1" />
+                        </Grid>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
