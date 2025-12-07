@@ -1,10 +1,11 @@
-﻿namespace MobilFeleves
+namespace MobilFeleves;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+        Routing.RegisterRoute(nameof(Pages.TripDetailPage), typeof(Pages.TripDetailPage));
+        Routing.RegisterRoute(nameof(Pages.TripEditPage), typeof(Pages.TripEditPage));
     }
 }
