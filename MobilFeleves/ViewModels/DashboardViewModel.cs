@@ -1,5 +1,4 @@
 using Microsoft.Maui.Controls;
-using MobilFeleves.Pages;
 using MobilFeleves.Services;
 
 namespace MobilFeleves.ViewModels;
@@ -29,7 +28,7 @@ public class DashboardViewModel : BaseViewModel
     {
         _repository = repository;
         Title = "HikeMate";
-        NavigateToListCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(Pages.TripListPage)}"));
+        NavigateToListCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(Pages.TripListPage)));
         AddTripCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(Pages.TripEditPage)));
     }
 

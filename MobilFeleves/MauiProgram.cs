@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MobilFeleves.Pages;
 using MobilFeleves.Services;
