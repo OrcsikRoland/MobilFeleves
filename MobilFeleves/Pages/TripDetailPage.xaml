@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:maps="clr-namespace:Microsoft.Maui.Controls.Maps;assembly=Microsoft.Maui.Controls.Maps"
              x:Class="MobilFeleves.Pages.TripDetailPage"
              Title="Túra részletei">
     <ScrollView>
@@ -13,12 +12,39 @@
             <Label Text="{Binding Trip.DurationText, StringFormat='Időtartam: {0}'}" />
             <Label Text="{Binding Trip.Description}" />
 
-            <maps:Map x:Name="TripMap"
-                     HeightRequest="240"
-                     MapType="Street"
-                     IsScrollEnabled="True"
-                     IsZoomEnabled="True"
-                     IsTrafficEnabled="True" />
+            <Border Stroke="{StaticResource Primary}" StrokeShape="RoundRectangle 12" Padding="8">
+                <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="*">
+                    <Image Source="{Binding Trip.PhotoPath}"
+                           Aspect="AspectFill"
+                           HeightRequest="220">
+                        <Image.Triggers>
+                            <DataTrigger TargetType="Image" Binding="{Binding Trip.PhotoPath}" Value="">
+                                <Setter Property="IsVisible" Value="False" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Image" Binding="{Binding Trip.PhotoPath}" Value="{x:Null}">
+                                <Setter Property="IsVisible" Value="False" />
+                            </DataTrigger>
+                        </Image.Triggers>
+                    </Image>
+                    <Label Grid.Row="0"
+                           Text="Nincs mentett fotó. Készíts egyet a túrához!"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="Gray"
+                           IsVisible="False">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Trip.PhotoPath}" Value="">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Trip.PhotoPath}" Value="{x:Null}">
+                                <Setter Property="IsVisible" Value="True" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+            </Border>
+
+            <Button Text="Fotó készítése" Command="{Binding CapturePhotoCommand}" />
 
             <HorizontalStackLayout Spacing="12">
                 <Button Text="Szerkesztés" Command="{Binding EditCommand}" />

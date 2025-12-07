@@ -1,8 +1,10 @@
+using System;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Maui.ApplicationModel.DataTransfer;
 using Microsoft.Maui.Controls;
-using Microsoft.Maui.Controls.Maps;
-using Microsoft.Maui.Devices.Sensors;
+using Microsoft.Maui.Media;
+using Microsoft.Maui.Storage;
 using MobilFeleves.Models;
 using MobilFeleves.Services;
 
@@ -12,11 +14,8 @@ namespace MobilFeleves.ViewModels;
 public class TripDetailViewModel : BaseViewModel
 {
     private readonly ITripRepository _repository;
-    private static readonly Location DefaultStartLocation = new(47.4979, 19.0402);
     private int _tripId;
     private Trip? _trip;
-    private Location _startLocation = DefaultStartLocation;
-    private MapSpan _mapRegion;
 
     public int TripId
     {
@@ -30,21 +29,10 @@ public class TripDetailViewModel : BaseViewModel
         set => SetProperty(ref _trip, value);
     }
 
-    public Location StartLocation
-    {
-        get => _startLocation;
-        set => SetProperty(ref _startLocation, value);
-    }
-
-    public MapSpan MapRegion
-    {
-        get => _mapRegion;
-        set => SetProperty(ref _mapRegion, value);
-    }
-
     public Command EditCommand { get; }
     public Command DeleteCommand { get; }
     public Command ShareCommand { get; }
+    public Command CapturePhotoCommand { get; }
 
     public TripDetailViewModel(ITripRepository repository)
     {
@@ -54,8 +42,7 @@ public class TripDetailViewModel : BaseViewModel
         EditCommand = new Command(async () => await GoToEditAsync(), () => Trip is not null);
         DeleteCommand = new Command(async () => await DeleteAsync(), () => Trip is not null);
         ShareCommand = new Command(async () => await ShareAsync(), () => Trip is not null);
-
-        _mapRegion = MapSpan.FromCenterAndRadius(StartLocation, Distance.FromKilometers(5));
+        CapturePhotoCommand = new Command(async () => await CapturePhotoAsync(), () => Trip is not null);
     }
 
     public async Task LoadTripAsync()
@@ -67,7 +54,6 @@ public class TripDetailViewModel : BaseViewModel
 
         Trip = await _repository.GetTripAsync(TripId);
         OnPropertyChanged(nameof(Trip));
-        UpdateLocation();
         UpdateCommands();
     }
 
@@ -76,6 +62,7 @@ public class TripDetailViewModel : BaseViewModel
         EditCommand.ChangeCanExecute();
         DeleteCommand.ChangeCanExecute();
         ShareCommand.ChangeCanExecute();
+        CapturePhotoCommand.ChangeCanExecute();
     }
 
     private async Task GoToEditAsync()
@@ -114,16 +101,38 @@ public class TripDetailViewModel : BaseViewModel
         });
     }
 
-    private void UpdateLocation()
+    private async Task CapturePhotoAsync()
     {
-        var latitude = Trip?.StartLatitude;
-        var longitude = Trip?.StartLongitude;
+        if (Trip is null)
+        {
+            return;
+        }
 
-        var location = latitude is null or 0 || longitude is null or 0
-            ? DefaultStartLocation
-            : new Location(latitude.Value, longitude.Value);
+        if (!MediaPicker.Default.IsCaptureSupported)
+        {
+            await Shell.Current.DisplayAlert("Kamera", "A készüléken nem érhető el a kamera.", "OK");
+            return;
+        }
 
-        StartLocation = location;
-        MapRegion = MapSpan.FromCenterAndRadius(location, Distance.FromKilometers(5));
+        var photo = await MediaPicker.Default.CapturePhotoAsync(new MediaPickerOptions
+        {
+            Title = $"{Trip.Title}-foto"
+        });
+
+        if (photo is null)
+        {
+            return;
+        }
+
+        var filePath = Path.Combine(FileSystem.AppDataDirectory,
+            $"trip_{Trip.Id}_{DateTime.UtcNow:yyyyMMddHHmmss}.jpg");
+
+        await using var sourceStream = await photo.OpenReadAsync();
+        await using var targetStream = File.Create(filePath);
+        await sourceStream.CopyToAsync(targetStream);
+
+        Trip.PhotoPath = filePath;
+        await _repository.SaveTripAsync(Trip);
+        OnPropertyChanged(nameof(Trip));
     }
 }
