@@ -1,3 +1,4 @@
+using System;
 using SQLite;
 
 namespace MobilFeleves.Models;
