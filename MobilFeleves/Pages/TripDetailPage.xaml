@@ -12,9 +12,27 @@
             <Label Text="{Binding Trip.DurationText, StringFormat='Időtartam: {0}'}" />
             <Label Text="{Binding Trip.Description}" />
 
+            <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="10" CornerRadius="10">
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="●" FontSize="20">
+                        <Label.Style>
+                            <Style TargetType="Label">
+                                <Setter Property="TextColor" Value="Red" />
+                                <Style.Triggers>
+                                    <DataTrigger TargetType="Label" Binding="{Binding IsOnline}" Value="True">
+                                        <Setter Property="TextColor" Value="LimeGreen" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Label.Style>
+                    </Label>
+                    <Label Text="{Binding ConnectivityMessage}" FontAttributes="Bold" />
+                </HorizontalStackLayout>
+            </Frame>
+
             <HorizontalStackLayout Spacing="12">
                 <Button Text="Szerkesztés" Command="{Binding EditCommand}" />
-                <Button Text="Megosztás" Command="{Binding ShareCommand}" />
+                <Button Text="Megosztás" Command="{Binding ShareCommand}" IsEnabled="{Binding IsOnline}" />
                 <Button Text="Törlés" TextColor="Red" Command="{Binding DeleteCommand}" />
             </HorizontalStackLayout>
         </VerticalStackLayout>

@@ -1,5 +1,3 @@
-using MobilFeleves.Pages;
-
 namespace MobilFeleves;
 
 public partial class AppShell : Shell

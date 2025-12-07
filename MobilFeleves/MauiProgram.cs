@@ -1,3 +1,4 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MobilFeleves.Pages;
 using MobilFeleves.Services;
@@ -19,6 +20,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<ITripRepository, TripRepository>();
+        builder.Services.AddSingleton<IConnectivityService, ConnectivityService>();
 
         builder.Services.AddTransient<DashboardViewModel>();
         builder.Services.AddTransient<TripListViewModel>();

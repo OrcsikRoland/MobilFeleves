@@ -8,7 +8,10 @@ namespace MobilFeleves.ViewModels;
 public class TripListViewModel : BaseViewModel
 {
     private readonly ITripRepository _repository;
+    private readonly IConnectivityService _connectivityService;
     private Trip? _selectedTrip;
+    private bool _isOnline;
+    private string _connectivityMessage = string.Empty;
 
     public ObservableCollection<Trip> Trips { get; } = new();
 
@@ -24,16 +27,32 @@ public class TripListViewModel : BaseViewModel
         }
     }
 
+    public bool IsOnline
+    {
+        get => _isOnline;
+        set => SetProperty(ref _isOnline, value);
+    }
+
+    public string ConnectivityMessage
+    {
+        get => _connectivityMessage;
+        set => SetProperty(ref _connectivityMessage, value);
+    }
+
     public Command LoadTripsCommand { get; }
     public Command AddTripCommand { get; }
 
-    public TripListViewModel(ITripRepository repository)
+    public TripListViewModel(ITripRepository repository, IConnectivityService connectivityService)
     {
         _repository = repository;
+        _connectivityService = connectivityService;
         Title = "Túrák";
 
         LoadTripsCommand = new Command(async () => await LoadTripsAsync());
         AddTripCommand = new Command(async () => await Shell.Current.GoToAsync(nameof(Pages.TripEditPage)));
+
+        UpdateConnectivity(_connectivityService.IsConnected);
+        _connectivityService.ConnectivityChanged += (_, isConnected) => UpdateConnectivity(isConnected);
     }
 
     public async Task LoadTripsAsync()
@@ -67,5 +86,13 @@ public class TripListViewModel : BaseViewModel
         }
 
         await Shell.Current.GoToAsync($"{nameof(Pages.TripDetailPage)}?tripId={trip.Id}");
+    }
+
+    private void UpdateConnectivity(bool isConnected)
+    {
+        IsOnline = isConnected;
+        ConnectivityMessage = isConnected
+            ? "Online: megosztás és frissítés elérhető"
+            : "Offline: a megosztás letiltva";
     }
 }
