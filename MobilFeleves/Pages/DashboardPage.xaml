@@ -6,9 +6,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="24" Spacing="16">
             <Label Text="Túrák összefoglaló" Style="{StaticResource Headline}" />
-            <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="12" CornerRadius="12">
-                <Label Text="{Binding ConnectivityMessage}" />
-            </Frame>
             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto" Padding="0,8">
                 <Frame BackgroundColor="{DynamicResource SecondaryColor}" CornerRadius="12" Padding="16" Grid.Column="0">
                     <VerticalStackLayout>

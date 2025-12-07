@@ -12,13 +12,9 @@
             <Label Text="{Binding Trip.DurationText, StringFormat='Időtartam: {0}'}" />
             <Label Text="{Binding Trip.Description}" />
 
-            <Frame BackgroundColor="{DynamicResource SecondaryColor}" Padding="10" CornerRadius="10">
-                <Label Text="{Binding ConnectivityMessage}" />
-            </Frame>
-
             <HorizontalStackLayout Spacing="12">
                 <Button Text="Szerkesztés" Command="{Binding EditCommand}" />
-                <Button Text="Megosztás" Command="{Binding ShareCommand}" IsEnabled="{Binding IsOnline}" />
+                <Button Text="Megosztás" Command="{Binding ShareCommand}" />
                 <Button Text="Törlés" TextColor="Red" Command="{Binding DeleteCommand}" />
             </HorizontalStackLayout>
         </VerticalStackLayout>

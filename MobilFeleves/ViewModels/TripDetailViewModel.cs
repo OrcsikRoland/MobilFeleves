@@ -9,11 +9,8 @@ namespace MobilFeleves.ViewModels;
 public class TripDetailViewModel : BaseViewModel
 {
     private readonly ITripRepository _repository;
-    private readonly IConnectivityService _connectivityService;
     private int _tripId;
     private Trip? _trip;
-    private bool _isOnline;
-    private string _connectivityMessage = string.Empty;
 
     public int TripId
     {
@@ -27,34 +24,18 @@ public class TripDetailViewModel : BaseViewModel
         set => SetProperty(ref _trip, value);
     }
 
-    public bool IsOnline
-    {
-        get => _isOnline;
-        set => SetProperty(ref _isOnline, value);
-    }
-
-    public string ConnectivityMessage
-    {
-        get => _connectivityMessage;
-        set => SetProperty(ref _connectivityMessage, value);
-    }
-
     public Command EditCommand { get; }
     public Command DeleteCommand { get; }
     public Command ShareCommand { get; }
 
-    public TripDetailViewModel(ITripRepository repository, IConnectivityService connectivityService)
+    public TripDetailViewModel(ITripRepository repository)
     {
         _repository = repository;
-        _connectivityService = connectivityService;
         Title = "Túra részletei";
 
         EditCommand = new Command(async () => await GoToEditAsync(), () => Trip is not null);
         DeleteCommand = new Command(async () => await DeleteAsync(), () => Trip is not null);
-        ShareCommand = new Command(async () => await ShareAsync(), () => Trip is not null && IsOnline);
-
-        UpdateConnectivity(connectivityService.IsConnected);
-        _connectivityService.ConnectivityChanged += (_, isConnected) => UpdateConnectivity(isConnected);
+        ShareCommand = new Command(async () => await ShareAsync(), () => Trip is not null);
     }
 
     public async Task LoadTripAsync()
@@ -110,14 +91,5 @@ public class TripDetailViewModel : BaseViewModel
             Subject = "Túra összefoglaló",
             Text = text
         });
-    }
-
-    private void UpdateConnectivity(bool isConnected)
-    {
-        IsOnline = isConnected;
-        ConnectivityMessage = isConnected
-            ? "Online: a megosztás aktív"
-            : "Offline: nincs internetkapcsolat";
-        ShareCommand.ChangeCanExecute();
     }
 }

@@ -9,11 +9,9 @@
     <TabBar>
         <ShellContent
             Title="Kezdőlap"
-            Route="DashboardPage"
             ContentTemplate="{DataTemplate pages:DashboardPage}" />
         <ShellContent
             Title="Túrák"
-            Route="TripListPage"
             ContentTemplate="{DataTemplate pages:TripListPage}" />
     </TabBar>
 
